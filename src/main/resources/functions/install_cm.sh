@@ -17,14 +17,29 @@
 
 set -x
 function install_cm() {
-  yum install -y expect
+  # install 'expect' somewhat aggressively
+  if [ -z `which expect` ] ; then
+    if [ ! -z `which yum` ] ; then 
+      yum install -y expect 
+    elif [ ! -z `which apt-get` ] ; then
+      # apt race?
+      echo first apt-get update at `date`
+      apt-get update
+      echo second apt-get update at `date`
+      apt-get update
+      apt-get install -y expect
+    else
+      echo WARNING - Missing expect software and not sure how to install here. Installation will likely fail.
+    fi
+  fi
+
   wget http://archive.cloudera.com/cm4/installer/latest/cloudera-manager-installer.bin
   chmod u+x cloudera-manager-installer.bin
   
   # Use expect for the install to make it appear interactive
   cat >> install <<END
 #!/usr/bin/expect -f
-set timeout 300
+set timeout 600
 spawn ./cloudera-manager-installer.bin --ui=stdio --noprompt --noreadme --nooptions --i-agree-to-all-licenses
 expect EOF
 END
