@@ -28,7 +28,7 @@
     <dependency>
       <groupId>org.apache.whirr</groupId>
       <artifactId>whirr-core</artifactId>
-      <version>0.7.1</version>
+      <version>0.8.0</version>
     </dependency>
   </dependencies>
   <build>
