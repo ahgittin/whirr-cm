@@ -35,6 +35,7 @@ public class CmServerHandler extends ClusterActionHandlerSupport {
 
   public static final String ROLE = "cmserver";
   private static final int CLIENT_PORT = 7180;
+  private static final int SUPERVISOR_PORT = 7182;
   
   @Override public String getRole() { return ROLE; }
   
@@ -46,9 +47,8 @@ public class CmServerHandler extends ClusterActionHandlerSupport {
   @Override
   protected void beforeConfigure(ClusterActionEvent event) throws IOException,
       InterruptedException {
-    event.getFirewallManager().addRule(
-        Rule.create().destination(role(ROLE)).port(CLIENT_PORT)
-    );
+    event.getFirewallManager().addRule( Rule.create().destination(role(ROLE)).port(CLIENT_PORT) );
+    event.getFirewallManager().addRule( Rule.create().destination(role(ROLE)).port(SUPERVISOR_PORT) );
   }
   
   @Override
